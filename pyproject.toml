@@ -1,0 +1,19 @@
+[project]
+name = "agentic-classroom"
+version = "0.1.0"
+description = "Agentic classroom simulation using CrewAI with professor, TA, and student agents"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "crewai>=0.70.0",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+    "ai-trace>=0.0.1",
+    "weasyprint>=60.0",
+    "markdown>=3.0.0",
+    "openai>=1.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

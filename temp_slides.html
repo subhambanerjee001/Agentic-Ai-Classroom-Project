@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@page {
+    size: A4;
+    margin: 0.4in;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+        .slide {
+            page-break-after: always;
+            min-height: 90vh;
+            padding: 32pt;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .slide:last-child { page-break-after: avoid; }
+        .slide-number {
+            position: absolute;
+            bottom: 12pt;
+            right: 18pt;
+            font-size: 9pt;
+            color: #94a3b8;
+        }
+        h1 {
+            font-size: 28pt;
+            color: white;
+            background: #2563eb;
+            padding: 20pt 32pt;
+            margin: -32pt -32pt 20pt -32pt;
+        }
+        h2 { font-size: 20pt; color: #1e40af; margin: 0 0 12pt 0; }
+    
+p  { margin: 7pt 0; }
+ul, ol { margin: 7pt 0; padding-left: 22pt; }
+li { margin: 4pt 0; }
+pre {
+    background: #1e293b;
+    color: #4ade80;
+    padding: 12pt;
+    font-size: 9.5pt;
+    border-radius: 4pt;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+code {
+    background: #f1f5f9;
+    color: #be185d;
+    padding: 1pt 4pt;
+    border-radius: 3pt;
+    font-size: 9.5pt;
+}
+pre code { background: none; color: inherit; padding: 0; }
+blockquote {
+    background: #fef9c3;
+    border-left: 4pt solid #f59e0b;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    color: #78350f;
+}
+table { border-collapse: collapse; width: 100%; margin: 10pt 0; }
+th, td { border: 1px solid #cbd5e1; padding: 7pt 10pt; font-size: 10pt; }
+th { background: #2563eb; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8fafc; }
+a { color: #2563eb; }
+img { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="slide"><h1>AI Agent</h1>
+<p># Slide 1: AI Agent<br />
+AI Agent<br />
+<em>Course: AI</em><br />
+Presenter: Professor</p><div class="slide-number">1 / 11</div></div>
+<div class="slide"><h1>Slide 2: Objectives</h1>
+<ul>
+<li>Understand the definition and concepts of AI Agent</li>
+<li>Learn how AI Agents work and their use cases</li>
+<li>Discuss the advantages, disadvantages, and common mistakes in AI Agent implementation</li>
+</ul><div class="slide-number">2 / 11</div></div>
+<div class="slide"><h1>Slide 3: Definition</h1>
+<blockquote>
+<p>An AI Agent is a software entity that perceives its environment and takes actions to achieve its goals.<br />
+- Key point: AI Agents exhibit autonomous behavior by making decisions through built-in algorithms.</p>
+</blockquote><div class="slide-number">3 / 11</div></div>
+<div class="slide"><h1>Slide 4: Concepts</h1>
+<ul>
+<li>Perception: The ability to sense the environment</li>
+<li>Action: Choosing and executing actions based on perception and internal logic</li>
+<li>Rewards: Feedback in the form of positive or negative reinforcement</li>
+<li>Goals: Objectives that drive the AI Agent's decisions and behavior</li>
+</ul><div class="slide-number">4 / 11</div></div>
+<div class="slide"><h1>Slide 5: How It Works</h1>
+<ul>
+<li>Perceive: Collect data from the environment using sensors</li>
+<li>Process: Analyze the data to understand the situation</li>
+<li>Decide: Use algorithms to select the best action based on the processed data</li>
+<li>Act: Execute the action through an actuator</li>
+</ul><div class="slide-number">5 / 11</div></div>
+<div class="slide"><h1>Slide 6: Code</h1>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Sample code for a simple AI Agent using reinforcement learning</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">choose_action</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">Q_values</span><span class="p">):</span>
+    <span class="c1"># Choose the action based on the Q_values table</span>
+    <span class="n">max_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Q_values</span><span class="p">[</span><span class="n">state</span><span class="p">])</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Q_values</span><span class="p">[</span><span class="n">state</span><span class="p">]</span><span class="o">==</span><span class="n">max_value</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">action</span>
+
+<span class="c1"># ... (Other functions and main loop)</span>
+</code></pre></div><div class="slide-number">6 / 11</div></div>
+<div class="slide"><h1>Slide 7: Use Cases</h1>
+<ul>
+<li>Game-playing AI like AlphaGo and Chess AI</li>
+<li>Autonomous vehicles and drones navigation</li>
+<li>Personal assistant software like Siri and Google Assistant</li>
+</ul><div class="slide-number">7 / 11</div></div>
+<div class="slide"><h1>Slide 8: Comparison</h1>
+<table>
+<thead>
+<tr>
+<th>AI Agent</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reactive</td>
+<td>Easy implementation, fast response</td>
+<td>Limited ability to plan for future actions</td>
+</tr>
+<tr>
+<td>Deliberative</td>
+<td>Plans actions based on goals and reasoning</td>
+<td>Slower response time, more complex implementation</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td>Combines reactive and deliberative methods for better performance</td>
+<td>More complex than both, requires advanced algorithms</td>
+</tr>
+</tbody>
+</table><div class="slide-number">8 / 11</div></div>
+<div class="slide"><h1>Slide 9: Mistakes</h1>
+<ul>
+<li>Not properly defining the AI Agent's goals leading to inconsistent behavior</li>
+<li>Inefficient action selection algorithms resulting in suboptimal decisions</li>
+<li>Failure to adapt to changing environments</li>
+</ul><div class="slide-number">9 / 11</div></div>
+<div class="slide"><h1>Slide 10: Summary</h1>
+<ul>
+<li>AI Agents are software entities that perceive, decide, and act</li>
+<li>They are commonly used in various applications like gaming and navigation</li>
+<li>Common mistakes in AI Agent design include poorly defined goals, inefficient algorithms, and failure to adapt to changing environments</li>
+</ul><div class="slide-number">10 / 11</div></div>
+<div class="slide"><h1>Slide 11: Questions</h1>
+<p>Questions?</p><div class="slide-number">11 / 11</div></div>
+</body>
+</html>
