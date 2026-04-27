@@ -9,9 +9,8 @@ from .tasks import (
     create_questions_task,
     create_answers_task,
 )
-from .renderer import convert_to_pdf, generate_interactive_slides
+from .renderer import convert_to_pdf
 from .visualization import save_crew_view
-from .client import kickoff_with_fallback
 from .callbacks import task_done_callback
 
 # Suppress CrewAI's repeated OpenTelemetry initialisation warnings
@@ -56,7 +55,7 @@ def main():
     )
     save_crew_view(full_crew, f"{OUTPUT_DIR}/{topic_safe}_full_crew_visualization.html")
 
-    # ── Step 1: Slides ───────────────────────────────────────────────────────
+    # ── Step 1: Slides (Professor uses create_presentation tool) ─────────────
     print("--- Step 1: Professor creates slides ---")
     crew1 = Crew(
         agents=[professor],
@@ -65,11 +64,8 @@ def main():
     )
     save_crew_view(crew1, f"{OUTPUT_DIR}/{topic_safe}_crew1_visualization.html")
 
-    slides_content = str(kickoff_with_fallback(crew1))
-    slides_file = f"{OUTPUT_DIR}/{topic_safe}_slides.md"
-    _write(slides_file, slides_content)
-    generate_interactive_slides(slides_file)
-    convert_to_pdf(slides_file, is_slides=True)
+    slides_content = str(crew1.kickoff())
+    # Note: slides .md / .pdf / .html are written by the create_presentation tool
 
     # ── Step 2: Quiz ─────────────────────────────────────────────────────────
     print("\n--- Step 2: TA creates quiz ---")
@@ -80,7 +76,7 @@ def main():
     )
     save_crew_view(crew2, f"{OUTPUT_DIR}/{topic_safe}_crew2_visualization.html")
 
-    quiz_content = str(kickoff_with_fallback(crew2))
+    quiz_content = str(crew2.kickoff())
     quiz_file = f"{OUTPUT_DIR}/{topic_safe}_quiz.md"
     _write(quiz_file, f"# Quiz: {TOPIC}\n\n{quiz_content}")
     convert_to_pdf(quiz_file)
@@ -94,7 +90,7 @@ def main():
     )
     save_crew_view(crew3, f"{OUTPUT_DIR}/{topic_safe}_crew3_visualization.html")
 
-    questions_content = str(kickoff_with_fallback(crew3))
+    questions_content = str(crew3.kickoff())
     questions_file = f"{OUTPUT_DIR}/{topic_safe}_questions.md"
     _write(questions_file, f"# Student Questions: {TOPIC}\n\n{questions_content}")
     convert_to_pdf(questions_file)
@@ -106,13 +102,18 @@ def main():
         tasks=[create_answers_task(ta, TOPIC, slides_content, questions_content)],
         **_CREW_OPTS,
     )
-    answers_content = str(kickoff_with_fallback(crew4))
+    answers_content = str(crew4.kickoff())
     answers_file = f"{OUTPUT_DIR}/{topic_safe}_answers.md"
     _write(answers_file, f"# TA Answers: {TOPIC}\n\n{answers_content}")
     convert_to_pdf(answers_file)
 
     print("\n=== Workflow Complete ===")
-    for f in [slides_file, quiz_file, questions_file, answers_file]:
+    for f in [
+        f"{OUTPUT_DIR}/{topic_safe}_slides.md",
+        quiz_file,
+        questions_file,
+        answers_file,
+    ]:
         print(f"  - {f}")
 
 

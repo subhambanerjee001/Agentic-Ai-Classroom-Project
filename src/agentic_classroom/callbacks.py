@@ -46,6 +46,27 @@ def crew_starting(crew, model: str) -> None:
     print(f"{'─' * 64}")
 
 
+def tool_use_callback(step_output) -> None:
+    """
+    Fires on each agent step (AgentAction or AgentFinish).
+    step_output may be a list of (AgentAction, observation) tuples or a single object.
+    We only log when a tool is actually being called.
+    """
+    steps = step_output if isinstance(step_output, list) else [step_output]
+    for step in steps:
+        # CrewAI passes (AgentAction, observation) tuples
+        action = step[0] if isinstance(step, tuple) else step
+        tool_name = getattr(action, "tool", None)
+        if tool_name:
+            tool_input = getattr(action, "tool_input", "")
+            if isinstance(tool_input, dict):
+                preview = ", ".join(f"{k}=..." for k in tool_input)
+            else:
+                preview = str(tool_input)[:60]
+            print(f"\n  {_YELLOW}{_BOLD}[TOOL]{_RESET} {_BOLD}{tool_name}{_RESET}"
+                  f"({preview})  {_DIM}{_ts()}{_RESET}")
+
+
 def task_done_callback(output) -> None:
     """Fires when a task finishes. Receives a TaskOutput object."""
     agent   = getattr(output, "agent", "Agent")

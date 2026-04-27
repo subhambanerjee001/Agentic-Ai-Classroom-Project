@@ -105,6 +105,10 @@ def create_slides_task(agent: Agent, topic: str) -> Task:
         accurate, topic-specific content about {topic}:
 
         {template}
+
+        Once you have completed writing all the slides, call the
+        create_presentation tool with the topic and the full slides markdown
+        to generate the PDF and HTML files.
     """)
 
     expected_output = dedent("""\
@@ -114,6 +118,7 @@ def create_slides_task(agent: Agent, topic: str) -> Task:
         - All <placeholder> tokens have been replaced with real content
         - The code slide contains a complete, runnable Python snippet
         - No text appears before slide 1 or after slide 11
+        - The create_presentation tool was called to generate the PDF and HTML files
     """)
 
     return Task(

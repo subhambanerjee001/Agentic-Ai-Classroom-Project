@@ -1,5 +1,7 @@
 from crewai import Agent
 from .client import create_llm
+from .tools import CreatePresentationTool
+from .callbacks import tool_use_callback
 
 
 def create_professor_agent() -> Agent:
@@ -13,6 +15,8 @@ def create_professor_agent() -> Agent:
             "You always ensure your content is accurate, engaging, and easy to understand."
         ),
         llm=create_llm(),
+        tools=[CreatePresentationTool()],
+        step_callback=tool_use_callback,
         verbose=False,
     )
 
