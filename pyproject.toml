@@ -9,9 +9,10 @@ dependencies = [
     "requests>=2.31.0",
     "python-dotenv>=1.0.0",
     "ai-trace>=0.0.1",
-    "weasyprint>=60.0",
+    "xhtml2pdf==0.2.11",
     "markdown>=3.0.0",
     "openai>=1.0.0",
+    "setuptools<82",
 ]
 
 [build-system]

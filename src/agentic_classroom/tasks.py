@@ -89,6 +89,7 @@ SLIDE_RULES = dedent("""\
     5. Keep each slide focused: 3–5 bullet points or one short code block max.
     6. The code slide must contain a complete, runnable Python snippet (not pseudocode).
     7. Do not number the slide titles (e.g. "Slide 1:", "Slide 2:") — titles only.
+    8. Do not use any emojis anywhere in the output.
 """)
 
 
@@ -133,7 +134,7 @@ def create_quiz_task(agent: Agent, topic: str, slides_content: str) -> Task:
             "- 3 short answer questions for deeper understanding\n"
             "- Detailed explanations for each answer\n"
             "- Reference to relevant slide numbers\n\n"
-            "Format: Clear markdown with questions, options, and detailed explanations."
+            "Format: Clear markdown with questions, options, and detailed explanations. Do not use any emojis."
         ),
         agent=agent,
         expected_output="A comprehensive quiz with multiple choice and short answer questions, each with detailed explanations",
@@ -154,7 +155,7 @@ def create_questions_task(
             "- 5-7 clarification questions (seeking more explanation)\n"
             "- 3-5 application questions (how to apply concepts)\n"
             "- 2-3 edge case questions (corner cases or exceptions)\n\n"
-            "Format: Organized by category with brief context for each question."
+            "Format: Organized by category with brief context for each question. Do not use any emojis."
         ),
         agent=agent,
         expected_output="A list of thoughtful questions organized by type (clarification, application, edge cases)",
@@ -175,7 +176,7 @@ def create_answers_task(
             "- A detailed, encouraging, and clear answer for each question\n"
             "- Code examples where appropriate to clarify points\n"
             "- References to specific slide concepts if applicable\n\n"
-            "Format: Use clear markdown with headers for each question and its detailed answer."
+            "Format: Use clear markdown with headers for each question and its detailed answer. Do not use any emojis."
         ),
         agent=agent,
         expected_output="Detailed, accurate, and encouraging answers to all the student's questions, formatted in markdown.",

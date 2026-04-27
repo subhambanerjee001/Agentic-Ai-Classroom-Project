@@ -13,7 +13,7 @@ def create_professor_agent() -> Agent:
             "You always ensure your content is accurate, engaging, and easy to understand."
         ),
         llm=create_llm(),
-        verbose=True,
+        verbose=False,
     )
 
 
@@ -28,7 +28,7 @@ def create_ta_agent() -> Agent:
             "You excel at identifying common misconceptions and addressing them in your explanations."
         ),
         llm=create_llm(),
-        verbose=True,
+        verbose=False,
     )
 
 
@@ -43,5 +43,5 @@ def create_student_agent() -> Agent:
             "You think about practical applications, real-world examples, and potential confusions."
         ),
         llm=create_llm(),
-        verbose=True,
+        verbose=False,
     )

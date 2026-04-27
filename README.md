@@ -1,19 +1,21 @@
 # Agentic Classroom
 
-An automated classroom simulation using CrewAI with three specialized agents that work together to create educational content.
+An automated classroom simulation using CrewAI with three specialized agents that collaborate to generate a full set of educational content from a single topic.
 
 ## Overview
 
-This project simulates a classroom environment with three AI agents:
-- **Professor** - Creates comprehensive markdown slides from a topic
-- **Teaching Assistant** - Creates quizzes and explanations based on the slides
-- **Student** - Generates potential questions students might ask
+The workflow runs four agents in sequence:
+
+1. **Professor** — creates structured markdown slides
+2. **Teaching Assistant** — writes a quiz with explanations based on the slides
+3. **Student** — generates clarification, application, and edge-case questions
+4. **Teaching Assistant** — answers all student questions in detail
 
 ## Prerequisites
 
-- Python 3.10 or higher
+- Python 3.11+
 - [uv](https://github.com/astral-sh/uv) package manager
-- OpenRouter API key (free at https://openrouter.ai)
+- OpenRouter API key (free tier available at https://openrouter.ai)
 
 ## Installation
 
@@ -23,58 +25,30 @@ uv sync
 
 ## Configuration
 
-### 1. Set API Key and Model
+### 1. Create your `.env` file
 
-Edit the `.env` file in the project root:
+Copy the provided template and fill in your API key:
 
 ```bash
-# Get your free API key from https://openrouter.ai
-OPENROUTER_API_KEY=your-api-key-here
-
-# Choose a model from https://openrouter.ai/models
-OPENROUTER_MODEL=openrouter/elephant-alpha
+cp .env.example .env
 ```
 
-**Available Models** (working with this project):
-- `openrouter/elephant-alpha` - Default, works well
-- `gpt-4o-mini` - Fast and cheap
-- `gpt-4o` - More capable
-- `meta-llama/llama-3.1-70b-instruct` - Open source option
+Then open `.env` and replace the placeholder:
 
-### 2. Set Topic
+```env
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=openai/gpt-oss-120b:free
+```
 
-Edit `src/agentic_classroom/main.py` to set your topic:
+The `openrouter/` prefix is added automatically — use the model ID exactly as shown on https://openrouter.ai/models.
+
+### 2. Set the topic
+
+Edit `src/agentic_classroom/main.py`:
 
 ```python
 TOPIC = "Your Topic Here"
 ```
-
-## Project Structure
-
-```
-agentic-classroom/
-├── .env                       # API key and model configuration
-├── pyproject.toml            # Project dependencies
-├── README.md                 # This documentation
-├── src/
-│   └── agentic_classroom/
-│       ├── __init__.py       # Package init
-│       ├── client.py         # LLM client (reads from .env)
-│       ├── agents.py         # Professor, TA, Student agents
-│       ├── tasks.py          # Task definitions
-│       └── main.py           # Main orchestration
-└── output/                   # Generated files (created at runtime)
-```
-
-## How It Works
-
-The workflow follows a sequential chain:
-
-1. **Professor** receives a topic and creates markdown slides
-2. **TA** receives the slides and creates a quiz with explanations
-3. **Student** receives both slides and quiz, generating potential questions
-
-Each agent uses OpenRouter API via CrewAI.
 
 ## Usage
 
@@ -82,29 +56,50 @@ Each agent uses OpenRouter API via CrewAI.
 uv run python -m agentic_classroom.main
 ```
 
-## Example
+## Output
 
-With `TOPIC = "Python Generators"`, the following files are generated:
+All files are written to `output/` with topic-based names. For `TOPIC = "API in python"`:
 
-- `output/Python_Generators_slides.md` - Lecture slides (markdown)
-- `output/Python_Generators_slides.pdf` - Lecture slides (PDF)
-- `output/Python_Generators_quiz.md` - Quiz with explanations (markdown)
-- `output/Python_Generators_quiz.pdf` - Quiz with explanations (PDF)
-- `output/Python_Generators_questions.md` - Student questions (markdown)
-- `output/Python_Generators_questions.pdf` - Student questions (PDF)
+| File | Description |
+|------|-------------|
+| `API_in_python_slides.md` | Lecture slides (markdown) |
+| `API_in_python_slides.pdf` | Lecture slides (PDF) |
+| `API_in_python_slides_interactive.html` | Reveal.js presentation |
+| `API_in_python_quiz.md / .pdf` | Quiz with explanations |
+| `API_in_python_questions.md / .pdf` | Student questions |
+| `API_in_python_answers.md / .pdf` | TA answers |
+| `*_visualization.html` | CrewAI flow diagrams |
 
-## Output Files
+## Project Structure
 
-All generated content is saved to the `output/` directory with topic-based filenames. Each file contains:
+```
+agentic-classroom/
+├── .env                        # Your API key and model (gitignored)
+├── .env.example                # Template — copy to .env to get started
+├── pyproject.toml
+├── src/
+│   └── agentic_classroom/
+│       ├── main.py             # Orchestration — set TOPIC here
+│       ├── agents.py           # Professor, TA, Student agent definitions
+│       ├── tasks.py            # Task prompts and templates
+│       ├── client.py           # LLM client with automatic model fallback
+│       ├── renderer.py         # Markdown -> PDF and Reveal.js HTML
+│       ├── visualization.py    # CrewAI flow diagram export
+│       └── callbacks.py        # Terminal status display
+└── output/                     # Generated files (created at runtime)
+```
 
-- **Slides**: Well-structured markdown with headers, bullets, and code examples
-- **Quiz**: Multiple choice and short answer questions with detailed explanations
-- **Questions**: Organized by type (clarification, application, edge cases)
+## Model Fallback
 
-## Customization
+If the primary model is rate-limited, the client automatically tries the next model in the fallback chain defined in `client.py`. To check which free models are currently available:
 
-You can modify:
-- Agent backstories in `agents.py`
-- Task descriptions in `tasks.py`
-- Topic in `main.py` (TOPIC variable)
-- Model and API key in `.env` file
+```bash
+uv run python -c "
+import urllib.request, json
+req = urllib.request.Request('https://openrouter.ai/api/v1/models')
+with urllib.request.urlopen(req) as r:
+    data = json.loads(r.read())
+free = [m['id'] for m in data['data'] if str(m.get('pricing',{}).get('prompt','1')) == '0']
+print('\n'.join(sorted(free)))
+"
+```
