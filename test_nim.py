@@ -4,7 +4,7 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 model = sys.argv[1]
 llm = ChatOpenAI(
-    openai_api_key="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",
+    openai_api_key="your-api-key",
     openai_api_base="https://integrate.api.nvidia.com/v1/chat/completions",
     model_name=model,
     temperature=0.0
